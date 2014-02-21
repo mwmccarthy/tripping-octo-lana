@@ -3,6 +3,8 @@
   window.onload = function() {
     init();
   }
+  
+  var shapeArray = [];
 
   var init = function() {
     var canvas = document.getElementById('board');
@@ -10,10 +12,18 @@
     var yCenter = canvas.height / 2;
     var ctx = canvas.getContext('2d');
     var myCircle = new Circle(xCenter, yCenter, 20.5, 'red');
-    myCircle.draw(ctx);
+    shapeArray.push(myCircle);
+    canvas.onclick = function() {
+      shapeArray[0].move(10,10);
+    };
+    setInterval(function() {render(ctx)}, 32);
   };
   
-  var render = function(objects) {
+  var render = function(ctx) {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    for (i in shapeArray) {
+      shapeArray[i].draw(ctx);
+    }
   };
 
   var Circle = function(x, y, r, color) {
