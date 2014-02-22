@@ -9,12 +9,19 @@
     var xCenter = canvas.width / 2;
     var yCenter = canvas.height / 2;
     var ctx = canvas.getContext('2d');
-    var myCircle = new Circle(xCenter, 0, 20.5, 'red', 4, 0);
+    var myCircle = new Circle(xCenter, 0, canvas.height/20, 'red', 4, 0);
+    document.getElementById('speed').onchange = function() {
+      if (myCircle.vx < 0) {
+        myCircle.vx = -document.getElementById('speed').value;
+      }
+      if (myCircle.vx >= 0) {
+        myCircle.vx = document.getElementById('speed').value;
+      }
+    }
     setInterval(function() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      myCircle.move(0, canvas.width, canvas.height);
+      myCircle.move(0, canvas.width, canvas.height, 0, document.getElementById('gravity').value / 10);
       myCircle.draw(ctx);
-      console.log(myCircle.vy)
     }, 16);
   };
 
@@ -36,7 +43,7 @@
     ctx.stroke();
   };
 
-  Circle.prototype.move = function(leftWallX, rightWallX, floorY) {
+  Circle.prototype.move = function(leftWallX, rightWallX, floorY, ceilY, g) {
     if (this.x + this.r > rightWallX) {
       this.x = rightWallX - this.r;
       this.wallBounce();
@@ -49,16 +56,18 @@
       this.y = floorY - this.r;
       this.floorBounce();
     }
-    if (this.y <= 0) {
-      this.y = 0.1;
+    if (this.y - this.r <= ceilY) {
+      this.y = ceilY + this.r;
       this.floorBounce();
     }
+
     if (this.vy < 0) {
-      this.vy = -Math.sqrt(this.y);
+      this.vy = -Math.sqrt((this.y - this.r) * g);
     }
     if (this.vy >= 0) {
-      this.vy = Math.sqrt(this.y);
+      this.vy = Math.sqrt((this.y - this.r + 0.001) * g);
     }
+
     this.x += this.vx;
     this.y += this.vy;
   };

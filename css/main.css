@@ -1,5 +1,14 @@
+h1 {
+  text-align: center
+}
 #board {
-  border-left: 1px solid gray;
-  border-right: 1px solid gray;
-  border-bottom: 1px solid gray;
+  border: 1px solid gray;
+  display: block;
+  margin: auto;
+}
+#sliders {
+  text-align: center;
+}
+span {
+  margin: 50px;
 }
